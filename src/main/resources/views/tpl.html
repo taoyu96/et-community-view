@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+ <title></title>
+ <meta charset="utf-8" />
+ <link href="../static/layui/css/layui.css" />
+ <script src="../static/layui/layui.js"></script>
+ <script>
+     var laytpl
+
+     layui.use('laytpl', function() {
+        laytpl = layui.laytpl;
+     });
+
+     //假设你得到了这么一段数据
+     var data = {
+           title: '507成员',
+           intro: '一群骚年，幻想改变世界，却被世界改变。',
+           list: [{ name: '套子', city: '广州' },
+               { name: '申大头', city: '北京' },
+               { name: '胡萝卜', city: '安徽' },
+               { name: '阳大师', city: '贵阳' },
+               { name: '苏大神', city: '宁夏' },
+               { name: '强子', city: '深圳' },
+               { name: '王月月', city: '北京' }]
+     };
+
+     window.onload = function () {
+           //建立视图。用于呈现渲染结果。
+           var gettpl = document.getElementById('testTpl').innerHTML;
+           laytpl(gettpl).render(data, function (html) {
+                //    得到的模板渲染到html
+                document.getElementById('testDiv').innerHTML = html;
+           });
+     }
+</script>
+</head>
+<body>
+<div id="testDiv">
+    <script id="testTpl" type="text/html">
+        <h1>{{ d.title }}</h1>
+        <p>{{d.intro}}</p>
+        <ul>
+            {{# for(var i = 0; i < d.list.length; i++){ }}
+            <li>
+                <span>姓名：{{ d.list[i].name }}</span>
+                <span>城市：{{ d.list[i].city }}</span>
+            </li>
+            {{# } }}
+        </ul>
+    </script>
+</div>
+</body>
+</html>

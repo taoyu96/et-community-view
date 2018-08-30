@@ -1,0 +1,16 @@
+
+spring:
+  thymeleaf: #thymelea模板配置
+    prefix: classpath:/views/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+
+server:
+  port: 8080
+  servlet:
+    context-path: /507
+
+upload:
+  path: E:/temp/upload
+  temppath: E:/temp/temppath

@@ -1,0 +1,201 @@
+
+<!--布局模板-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head th:fragment="htmlhead">
+    <title>507-社区</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="507-交流社区">
+    <meta name="description" content="507-交流社区">
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}"/>
+    <link rel="stylesheet" th:href="@{/css/global.css}"/>
+    <script th:src="@{/layui/layui.js}"></script>
+
+  </head>
+
+  <body >
+
+    <div th:fragment="div_header" class="fly-header layui-bg-black">
+      <div class="layui-container">
+        <a class="fly-logo" th:href="@{/}">
+          <img th:src="@{/images/logo.png}" alt="layui">
+        </a>
+        <ul class="layui-nav fly-nav layui-hide-xs">
+          <li class="layui-nav-item layui-this">
+            <a th:href="@{/}"><i class="iconfont icon-jiaoliu"></i>交流</a>
+          </li>
+        </ul>
+
+        <ul class="layui-nav fly-nav-user">
+
+          <!-- 未登入的状态 -->
+          <li class="layui-nav-item" id="no_login_1">
+            <a class="iconfont icon-touxiang layui-hide-xs" th:href="@{/user/login}"></a>
+          </li>
+          <li class="layui-nav-item" id="no_login_2">
+            <a th:href="@{/user/login}">登入</a>
+          </li>
+          <li class="layui-nav-item" id="no_login_3">
+            <a th:href="@{/user/reg}">注册</a>
+          </li>
+          <!--<li class="layui-nav-item layui-hide-xs">
+            <a href="" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" title="QQ登入" class="iconfont icon-qq"></a>
+          </li>
+          <li class="layui-nav-item layui-hide-xs">
+            <a href="" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" title="微博登入" class="iconfont icon-weibo"></a>
+          </li>-->
+
+          <!-- 登入后的状态 -->
+            <li class="layui-nav-item" id="LAY_login_info">
+              <script id="login_Tpl" type="text/html">
+              <a class="fly-nav-avatar" href="javascript:;">
+                <cite class="layui-hide-xs">{{d.nickname}}</cite>
+                <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：{{d.authinfo}}"></i>
+                {{# if(d.vip_string) { }}
+                <i class="layui-badge fly-badge-vip layui-hide-xs">{{d.vip_string}}</i>
+                {{# } }}
+                <img th:src="@{/img/{{d.headpicfileid}}}" alt="{{d.nickname}}">
+              </a>
+              <dl class="layui-nav-child">
+                <dd><a th:href="@{/user/set}"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+                <dd><a th:href="@{/user/message}"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
+                <dd><a th:href="@{/user/home}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+                <hr style="margin: 5px 0;">
+                <dd><a href="#" onclick="logout()" style="text-align: center;">退出</a></dd>
+              </dl>
+              </script>
+            </li>
+        </ul>
+      </div>
+    </div>
+
+    <div th:fragment="div_column" class="fly-panel fly-column">
+      <div class="layui-container">
+        <ul class="layui-clear">
+          <li th:class="${type == null}? 'layui-hide-xs layui-this' : 'llayui-hide-xs'"><a th:href="@{/}">首页</a></li>
+          <li th:class="${type} eq '1' ? 'layui-hide-xs layui-this' : 'llayui-hide-xs'"><a th:href="@{/column/1}">提问</a></li>
+          <li th:class="${type} eq '2' ? 'layui-hide-xs layui-this' : 'llayui-hide-xs'"><a th:href="@{/column/2}">分享<span class="layui-badge-dot"></span></a></li>
+          <li th:class="${type} eq '3' ? 'layui-hide-xs layui-this' : 'llayui-hide-xs'"><a th:href="@{/column/3}">讨论</a></li>
+          <li th:class="${type} eq '4' ? 'layui-hide-xs layui-this' : 'llayui-hide-xs'"><a th:href="@{/column/4}">建议</a></li>
+          <li th:class="${type} eq '5' ? 'layui-hide-xs layui-this' : 'llayui-hide-xs'"><a th:href="@{/column/5}">公告</a></li>
+          <li th:class="${type} eq '6' ? 'layui-hide-xs layui-this' : 'llayui-hide-xs'"><a th:href="@{/column/6}">动态</a></li>
+          <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>
+
+          <!-- 用户登入后显示 -->
+          <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a th:href="@{/user/index}">我发表的贴</a></li>
+          <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a th:href="@{/user/index#collection}">我收藏的贴</a></li>
+        </ul>
+
+        <div class="fly-column-right layui-hide-xs">
+          <span class="fly-search"><i class="layui-icon"></i></span>
+          <a th:href="@{/jie/add}" class="layui-btn">发表新帖</a>
+        </div>
+        <div class="layui-hide-sm layui-show-xs-block" style="margin-top: -10px; padding-bottom: 10px; text-align: center;">
+          <a th:href="@{/jie/add}" class="layui-btn">发表新帖</a>
+        </div>
+      </div>
+    </div>
+
+    <ul th:fragment="ui_user_nav" class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
+      <li th:class="${page} eq 'home' ? 'layui-nav-item layui-this' : 'layui-nav-item'">
+        <a  th:href="@{/user/home}">
+          <i class="layui-icon">&#xe609;</i>
+          我的主页
+        </a>
+      </li>
+      <li th:class="${page} eq 'index' ? 'layui-nav-item layui-this' : 'layui-nav-item'">
+        <a  th:href="@{/user/index}">
+          <i class="layui-icon">&#xe612;</i>
+          用户中心
+        </a>
+      </li>
+      <li th:class="${page} eq 'set' ? 'layui-nav-item layui-this' : 'layui-nav-item'">
+        <a th:href="@{/user/set}">
+          <i class="layui-icon">&#xe620;</i>
+          基本设置
+        </a>
+      </li>
+      <li th:class="${page} eq 'message' ? 'layui-nav-item layui-this' : 'layui-nav-item'">
+        <a th:href="@{/user/message}">
+          <i class="layui-icon">&#xe611;</i>
+          我的消息
+        </a>
+      </li>
+    </ul>
+
+    <div th:fragment="div_footer">
+      <div class="fly-footer">
+        <p><a th:href="@{/}" target="_blank">507-社区</a> 2018 &copy; <a href="https://www.bluemyth.club/homepage" target="_blank">bluemyth.club 出品</a></p>
+        <p>
+          <a href="#" target="_blank">QQ交流群</a>
+          <a href="#" target="_blank">微信交流群</a>
+          <a href="#" target="_blank">微信公众号</a>
+        </p>
+      </div>
+      <script th:inline="javascript">
+          function getBaseUrl(){
+              var pathname = window.location.pathname
+              var index = pathname.substr(1).indexOf("/");
+              var contextPath = pathname.substr(0,index+1);
+              return window.location.origin + contextPath;
+          }
+
+          function logout() {
+              layui.data('user',null)
+              location.href =  getBaseUrl();
+          }
+
+          layui.cache.page = '';
+
+          if(!layui.cache.user){
+              layui.cache.user = {
+                  jwt: '',
+                  info:{
+                      userid:'-1',
+                      nickname:'游客'
+                  }
+              };
+          }
+
+          if(!layui.data('user').jwt) {
+              layui.data('user', { key: 'jwt', value:""  });
+              layui.data('user', {
+                  key: 'info',
+                  value: {
+                      userid: '-1',
+                      nickname: '游客'
+                  }
+              });
+          }
+
+
+          layui.config({
+              version: "3.0.0"
+              ,base: getBaseUrl() + '/mods/'  //这里实际使用时，建议改成绝对路径
+          }).extend({
+              fly: 'index'
+          }).use('fly',function () {
+              var api = layui.api
+              var fly = layui.fly
+              var laytpl = layui.laytpl
+              var $ = layui.jquery
+
+              if(layui.data('user').jwt) {
+                  $('#no_login_1').hide()
+                  $('#no_login_2').hide()
+                  $('#no_login_3').hide()
+                  var _tpl = $('#login_Tpl').html();
+                  laytpl(_tpl).render(layui.data('user').info, function (html) {
+                      $('#LAY_login_info').html(html) //得到的模板渲染到html
+                  });
+
+              }
+          });
+      </script>
+    </div>
+
+  </body>
+</html>

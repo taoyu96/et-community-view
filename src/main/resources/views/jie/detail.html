@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout :: htmlhead"></head>
+<body>
+
+<div th:replace="layout :: div_header"></div>
+<div th:replace="layout :: div_column"></div>
+
+<div class="layui-container">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md8 content detail">
+
+            <div class="fly-panel detail-box" id="fly-panel-detail">
+                <script id="detailTpl" type="text/html">
+                    <h1>{{d.title}}</h1>
+                    <div class="fly-detail-info">
+                        <!-- <span class="layui-badge">审核中</span> -->
+                        <span class="layui-badge layui-bg-green fly-detail-column">{{d.type_string}}</span>
+
+                        {{# if(d.status == 1){ }}
+                        <span class="layui-badge" style="background-color: #5FB878;">{{d.status_string}}</span>
+                        {{# }else{ }}
+                        <span class="layui-badge" style="background-color: #999;">未结</span>
+                        {{# } }}
+
+                        {{# if(d.top_string){ }}
+                        <span class="layui-badge layui-bg-black">{{d.top_string}}</span>
+                        {{# } }}
+                        {{# if(d.wonder_string){ }}
+                        <span class="layui-badge layui-bg-red">{{d.wonder_string}}</span>
+                        {{# } }}
+
+                        <div class="fly-admin-box" data-id="123">
+                            <span class="layui-btn layui-btn-xs jie-admin" type="del">删除</span>
+
+                            {{# if(d.top == 0){ }}
+                            <span class="layui-btn layui-btn-xs jie-admin" type="set" field="stick" rank="1">置顶</span>
+                            {{# }else{ }}
+                            <span class="layui-btn layui-btn-xs jie-admin" type="set" field="stick" rank="0"
+                                  style="background-color:#ccc;">取消置顶</span>
+                            {{# } }}
+
+                            {{# if(d.wonder == 0){ }}
+                            <span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="1">加精</span>
+                            {{# }else{ }}
+                            <span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="0"
+                                  style="background-color:#ccc;">取消加精</span>
+                            {{# } }}
+                        </div>
+                        <span class="fly-list-nums">
+                    <a href="#comment"><i class="iconfont" title="回答">&#xe60c;</i> {{d.commentnum}}</a>
+                    <i class="iconfont" title="人气">&#xe60b;</i> {{d.readnum}}
+                  </span>
+                    </div>
+                    <div class="detail-about">
+                        <a class="fly-avatar" th:href="@{/u/{{d.userid}}}">
+                            <img th:src="@{/img/{{d.headpicfileid}}}" alt="{{d.nickname}}">
+                        </a>
+                        <div class="fly-detail-user">
+                            <a th:href="@{/u/{{d.userid}}}" class="fly-link">
+                                <cite>{{d.nickname}}</cite>
+                                {{# if(d.authinfo){ }}
+                                <i class="iconfont icon-renzheng" title="{{d.authinfo}}"></i>
+                                {{# } }}
+                                {{# if(d.vip_string){ }}
+                                <i class="layui-badge fly-badge-vip">{{d.vip_string}}</i>
+                                {{# } }}
+                            </a>
+                            <span>{{ fly.formatdate(d.createtime) }}</span>
+                        </div>
+                        <div class="detail-hits" id="LAY_jieAdmin" data-id="123">
+                            <span style="padding-right: 10px; color: #FF7200">悬赏：{{d.rewardnum}}飞吻</span>
+                            <span class="layui-btn layui-btn-xs jie-admin" type="edit"><a th:href="@{/jie/add}">编辑此贴</a></span>
+                        </div>
+                    </div>
+                    <div class="detail-body photos">
+                        {{ fly.content(d.content) }}
+                    </div>
+                </script>
+            </div>
+
+            <div class="fly-panel detail-box" id="flyReply">
+                <fieldset class="layui-elem-field layui-field-title" style="text-align: center;">
+                    <legend>回帖</legend>
+                </fieldset>
+
+                <ul class="jieda" id="jieda">
+                    <script id="commontsTpl" type="text/html">
+                        {{# for(var i = 0; i < d.length; i++){ }}
+                        <li data-id="{{d[i].commentid}}" {{d[i].status== 1 ? 'class="jieda-daan"' : '' }} >
+                        <a name="item-{{d[i].commentid}}"></a>
+                        <div class="detail-about detail-about-reply">
+                            <a class="fly-avatar" th:href="@{/u/{{d[i].userid}}}">
+                                <img th:src="@{/img/{{d[i].headpicfileid}}}" alt="{{d[i].nickname}}">
+                            </a>
+                            <div class="fly-detail-user">
+                                <a th:href="@{/u/{{d[i].userid}}}" class="fly-link">
+                                    <cite>{{d[i].nickname}}</cite>
+                                    {{# if(d[i].authinfo){  }}
+                                    <i class="iconfont icon-renzheng" title="{{d[i].authinfo}}"></i>
+                                    {{#  }  }}
+                                    {{# if(d[i].vip_string){  }}
+                                    <i class="layui-badge fly-badge-vip">{{d[i].vip_string}}</i>
+                                    {{#  }  }}
+                                </a>
+
+                                <span>(楼主)</span>
+                                <span style="color:#5FB878">(管理员)</span>
+                                <span style="color:#FF9E3F">（社区之光）</span>
+                                <span style="color:#999">（该号已被封）</span>
+                            </div>
+
+                            <div class="detail-hits">
+                                <span>{{ fly.formatdate(d[i].createtime) }}</span>
+                            </div>
+
+                            {{# if(d[i].status ==1){ }}
+                            <i class="iconfont aicon-cain" title="最佳答案"></i>
+                            {{# } }}
+                        </div>
+                        <div class="detail-body jieda-body photos">
+                            {{ fly.content(d[i].content) }}
+                        </div>
+                        <div class="jieda-reply">
+                            <span class="jieda-zan zanok" type="zan">
+                                <i class="iconfont icon-zan"></i>
+                                <em>66</em>
+                            </span>
+                            <span type="reply">
+                                 <i class="iconfont icon-svgmoban53"></i>回复
+                           </span>
+                            <div class="jieda-admin">
+                                <span type="edit">编辑</span>
+                                <span type="del">删除</span>
+                                <span class="jieda-accept" type="accept">采纳</span>
+                            </div>
+                        </div>
+                        </li>
+                        {{# } }}
+
+                        {{# if(d.length == 0){ }}
+                        <!-- 无数据时 -->
+                        <li class="fly-none">消灭零回复</li>
+                        {{# }  }}
+                    </script>
+                </ul>
+
+                <div class="layui-form layui-form-pane">
+                    <form action="/jie/reply/" method="post">
+                        <div class="layui-form-item layui-form-text">
+                            <a name="comment"></a>
+                            <div class="layui-input-block">
+                                <textarea id="L_content" name="content" required lay-verify="required"
+                                          placeholder="请输入内容" class="layui-textarea fly-editor"
+                                          style="height: 150px;"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <input type="hidden" name="jid" th:value="${id}">
+                            <button class="layui-btn" lay-filter="*" lay-submit>提交回复</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md4">
+
+            <dl class="fly-panel fly-list-one" id="fly-list-hot">
+                <script id="hotTpl" type="text/html">
+                    <dt class="fly-panel-title">本周热议</dt>
+                    {{# for(var i = 0; i < d.length; i++){ }}
+                    <dd>
+                        <a th:href="@{/jie/{{d[i].articleid}}}">{{d[i].title}}</a>
+                        <span><i class="iconfont icon-pinglun1"></i>{{d[i].commentnum}}</span>
+                    </dd>
+                    {{# } }}
+
+                    {{# if(d.length == 0){ }}
+                    <!-- 无数据时 -->
+                    <div class="fly-none">没有相关数据</div>
+                    {{# } }}
+                </script>
+            </dl>
+            <div class="fly-panel">
+                <div class="fly-panel-title">
+                    这里可作为广告区域
+                </div>
+                <div class="fly-panel-main">
+                    <a href="http://layim.layui.com/?from=fly" target="_blank" class="fly-zanzhu"
+                       time-limit="2017.09.25-2099.01.01" style="background-color: #5FB878;">LayIM 3.0 - layui 旗舰之作</a>
+                </div>
+            </div>
+
+            <div class="fly-panel" style="padding: 20px 0; text-align: center;">
+                <img th:src="@{/images/weixin.jpg}" style="max-width: 100%;" alt="layui">
+                <p style="position: relative; color: #666;">微信扫码关注507公众号</p>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div th:replace="layout :: div_footer"></div>
+
+<script th:inline="javascript">
+    var fly
+    layui.use(['jie'], function(){
+        var api = layui.api
+         fly = layui.fly
+        var laytpl = layui.laytpl
+        var $ = layui.jquery
+
+        var id = /*[[${id}]]*/ '';
+        // alert(id)
+
+        fly.json(api.format(api.blog.articleone), {id: id}, function (res) {
+            var _tpl = $('#detailTpl').html();
+            laytpl(_tpl).render(res, function (html) {
+                $('#fly-panel-detail').html(html) //得到的模板渲染到html
+            });
+        }, {type: 'get'});
+
+        fly.json(api.format(api.blog.comments), {id: id}, function (res) {
+            var _tpl = $('#commontsTpl').html();
+            laytpl(_tpl).render(res, function (html) {
+                $('#jieda').html(html) //得到的模板渲染到html
+            });
+        }, {type: 'get'});
+
+        fly.json(api.format(api.blog.articlehot), {type:'all'}, function(res){
+            var _tpl = $('#hotTpl').html();
+            laytpl(_tpl).render(res, function (html) {
+                $('#fly-list-hot').html(html) //得到的模板渲染到html
+            });
+        },{type:'get'});
+    })
+</script>
+</body>
+</html>
