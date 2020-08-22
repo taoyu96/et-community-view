@@ -1,4 +1,4 @@
-package com.bluemyth.demo;
+package com.bluemyth.view;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,19 +21,19 @@ public class PageController {
 
     @RequestMapping(value = "/")
     public String index() {
-        return "/index";
+        return "index";
     }
 
     @RequestMapping(value = "/test")
     public String test() {
-        return "/test";
+        return "test";
     }
 
     @RequestMapping(value = "/column/{type}")
     public ModelAndView cloumn(@PathVariable String type) {
         ModelAndView mv = new ModelAndView();
         mv.addObject("type",type);
-        mv.setViewName("/jie/index");
+        mv.setViewName("jie/index");
         return mv;
     }
 
@@ -42,14 +42,14 @@ public class PageController {
         ModelAndView mv = new ModelAndView();
         mv.addObject("type",type);
         mv.addObject("status",status);
-        mv.setViewName("/jie/index");
+        mv.setViewName("jie/index");
         return mv;
     }
 
     @RequestMapping(value = "/jie/add")
     public ModelAndView jie() {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("/jie/add");
+        mv.setViewName("jie/add");
         return mv;
     }
 
@@ -57,7 +57,7 @@ public class PageController {
     public ModelAndView jie(@PathVariable String id) {
         ModelAndView mv = new ModelAndView();
         mv.addObject("id",id);
-        mv.setViewName("/jie/detail");
+        mv.setViewName("jie/detail");
         return mv;
     }
 
@@ -65,7 +65,7 @@ public class PageController {
     public ModelAndView userpage(@PathVariable String page) {
         ModelAndView mv = new ModelAndView();
         mv.addObject("page",page);
-        mv.setViewName("/user/"+page);
+        mv.setViewName("user/"+page);
         return mv;
     }
 
@@ -73,7 +73,7 @@ public class PageController {
     public ModelAndView uid(@PathVariable String id) {
         ModelAndView mv = new ModelAndView();
         mv.addObject("id",id);
-        mv.setViewName("/user/home");
+        mv.setViewName("user/home");
         return mv;
     }
 

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <property scope="context" name="LEVEL" value="DEBUG"/>
+    <property scope="context" name="LOG_BUILDER_HOME" value="./logs"/>
+    <property name="log.basedir" value="./logs"/>  <!-- 日志文件存储位置 -->
+    <property name="log.context.name" value="service"/>
+    <property name="log.charset" value="UTF-8"/>
+    <property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS, Asia/Shanghai} [%t] %-5level %logger{50} [%file : %line] - %msg%n"/>
+    <property name="LOG_PATH" value="${LOG_PATH:-${LOG_TEMP:-${log.basedir:-${java.io.tmpdir:-/tmp}}}/}"/>
+    <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH}${log.context.name}.log}"/>
+
+    <contextName>${log.context.name}</contextName>
+
+    <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}</file>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ALL</level>
+        </filter>
+        <!-- 按大小滚动-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${LOG_FILE}.log.%i</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>5</maxIndex>
+        </rollingPolicy>
+
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>100MB</maxFileSize>
+        </triggeringPolicy>
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoder的默认实现类是ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <logger name="com.bluemyth"/>
+
+    <root level="info">
+        <appender-ref ref="RollingFile"/>
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

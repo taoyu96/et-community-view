@@ -6,7 +6,8 @@
 layui.define(function(exports){
 
     var api = {
-        baseApi:'http://127.0.0.1:8081/api',
+        //baseApi:'http://127.0.0.1:18081/api',
+        baseApi:'/api',
 
         user :{
             userinfo: '/sys/userinfo',

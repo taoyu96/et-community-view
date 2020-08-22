@@ -1,0 +1,19 @@
+1、maven打包方式：
+（1）指定profile, 默认打开发环境的tar包：mvn clean package
+
+2、启动方式：
+解压zip包后，进入bin目录
+输入sh run.sh start 可进行启动
+启动脚本报编译器错误，则先运行命令 sed -i 's/\r$//' run.sh
+
+3、关闭方式：
+进入bin目录
+输入sh run.sh stop 可进行关闭
+
+4、日志查看方式：
+进入logs目录查看
+
+5、环境配置：
+进入config目录，
+vim application.yml进行配置修改
+请根据配置文件的注释进行按需修改，同时保证yaml文件格式的正确性，以确保程序可以运行。
